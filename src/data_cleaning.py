@@ -33,7 +33,11 @@ def clean_column_names(df: pd.DataFrame) -> pd.DataFrame:
         .str.replace(" ", "_")
     )
     return df
-
+#this function handles missing values for price and qty
+#copilot suggested using dropna, so i modified it to match
+def handle_missing_values(df: pd.DataFrame) -> pd.DataFrame:
+    df = df.dropna(subset=["price", "qty"])
+    return df
 
 # this function handles missing and invalid price/qty values
 # converts them to numbers, drops missing, and removes negative values
@@ -70,3 +74,21 @@ df = remove_invalid_rows(df)
 # store a clean version in data/processed for later analysis
 df.to_csv(processed_path, index=False)
 print("Saved cleaned file to:", processed_path)
+
+if __name__ == "__main__":
+    raw_path = "data/raw/sales_data_raw.csv"
+    cleaned_path = "data/processed/sales_data_clean.csv"
+
+    df_raw = load_data(raw_path)
+    df_clean = clean_column_names(df_raw)
+
+    # convert price/qty to numeric before missing-value handling
+    df_clean["price"] = pd.to_numeric(df_clean["price"], errors="coerce")
+    df_clean["qty"] = pd.to_numeric(df_clean["qty"], errors="coerce")
+
+    df_clean = handle_missing_values(df_clean)
+    df_clean = remove_invalid_rows(df_clean)
+
+    df_clean.to_csv(cleaned_path, index=False)
+    print("Cleaning complete. First few rows:")
+    print(df_clean.head())
