@@ -1,3 +1,11 @@
 #Project cleanup 
 
 The purpose of this project is to demonstrate a clean, organized data set using both python and Github. What I was able to do is transform a raw, unorganized dataset into a processed, clean version to better analyze the data. 
+
+##How to Run
+
+From the project root folder, run:
+
+
+''' bash
+python src/data_cleaning.py
